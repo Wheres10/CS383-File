@@ -1,5 +1,264 @@
 Instruction
 1.	Make progress in your public GitHub repository
+#include<stdio.h>
+#include<iostream>
+#include<stdlib.h>
+#include <string.h>
+#define N 100
+using namespace std;
+//凯撒密码
+
+//加密公式 f(a)=(a+3) mod 26
+
+//解密公式 f(a)=(a+23) mod 26
+
+void Encry(char *strI,int numB,int model);//加密公式函数
+void Decry(char *strI,int numB,int model);//解密公式函数
+void Crack(char *strI,int numB,int model);
+int FileOut(char *strI);
+int main()
+{
+
+         char str[N];
+         int model;
+         int numB;
+         while(1)
+
+         {
+
+                   cout<<"凯撒密码：请选择模式:\n";
+
+                   cout<<"1.加密\n";
+
+                   cout<<"2.解密\n";
+
+                   cout<<"3.退出\n";
+                   
+                   cout<<"4.暴力破解\n";
+                   cin>>model;
+
+                   cout<<endl;
+                   switch(model)
+
+                   {
+
+                            case 1:
+
+                                  cout<<"请输入要加密的字符串:";
+
+                                     cin>>str;
+
+                                     cout<<"请输入该密码算法的偏移数量：";
+
+                                     cin>>numB;
+
+                                     Encry(str,numB,model);
+
+                                     cout<<endl;
+
+                            break;
+
+                          case 2:
+
+                                  cout<<"请输入要解密的字符串:";
+
+                                  cin>>str;
+
+                                  cout<<"请输入原密码算法的偏移数量：";
+
+                                  cin>>numB;
+
+                                     Decry(str,numB,model);
+
+                                  cout<<endl;
+
+                         break;
+                         case 3:
+
+                                  return 0;
+
+                         break;
+
+                          default:
+
+                                  break;
+                         case 4:
+                         	cout<<"请输入明文：";
+							 cin>>str;
+							 Crack(str,numB,model);
+							 cout<<endl;
+						 break;
+                   }
+
+         }
+
+        
+
+         return 0;
+
+}
+
+void Encry(char *strI,int numB,int model)
+{
+
+         if(model==1)
+         
+         {
+
+                   for(int i=0; i<strlen(strI); i++)
+
+        {
+
+            if(strI[i] >= 'A' && strI[i] <= 'Z')
+
+            {
+
+                strI[i] = ((strI[i]-'A')+numB)%26+'A';
+
+            }
+
+            else if(strI[i] >= 'a' && strI[i] <= 'z')
+
+            {
+
+                strI[i] = ((strI[i]-'a')+numB)%26+'a';
+                strI[i]=strI[i]-32; 
+
+            }
+
+        }
+
+        cout<<"加密完成："<<strI<<endl;
+
+                   FileOut(strI);
+
+                   cout<<"已输出到文件！"<<endl;
+
+         }
+
+         else
+
+         {
+
+                   cout<<"该模式不支持此项功能！"<<endl;
+
+         }       
+
+}
+
+void Decry(char *strI,int numB,int model)
+{
+
+         if(model==2)
+
+         {
+
+                   int num;
+
+                   num=26-numB;
+
+                   for(int i=0; i<strlen(strI); i++)
+
+        {
+
+            if(strI[i] >= 'A' && strI[i] <= 'Z')
+
+            {
+
+                strI[i] = ((strI[i]-'A')+num)%26+'A';
+
+            }
+
+            else if(strI[i] >= 'a' && strI[i] <= 'z')
+
+            {
+
+                strI[i] = ((strI[i]-'a')+num)%26+'a';
+                strI[i]=strI[i]-32; 
+
+            }
+
+        }
+
+        cout<<"解密完成："<<strI<<endl;
+
+         }
+
+         else
+
+         {
+
+                   cout<<"该模式不支持此项功能！"<<endl;
+
+         }       
+
+}
+void Crack(char *strI,int numB,int model)
+{
+
+using namespace std;
+	string str;//密文 
+	string b=str;//存放明文 
+	cout<<"要破解的密文："; 
+	getline(cin,str); 
+	int k;  //未知密钥
+	//根据凯撒加密算法知明文有26种可能性
+	//暴力列出所有的26种情况
+	cout<<"所有可能的明文："<<endl;
+	for(k=0;k<26;k++) 
+	{
+		cout<<"密钥K="<<k<<"时:" ;
+		for(int i=0;i<str.length();i++)
+		{
+			if(str[i]!=' ')
+			{  //相减过程出会出现负数情况，因此需要先进行“+26”操作再取余 
+				if(str[i]>='a' && str[i]<='z') cout<<char((str[i]-k-'a'+26)%26+'a'-32);
+				if(str[i]>='A' && str[i]<='Z') cout<<char((str[i]-k-'A'+26)%26+'A');
+			}
+			if(str[i]==' ') cout<<" ";
+		}
+		cout<<endl; 
+	
+	}
+
+}
+
+int FileOut(char *strI)
+
+{
+         FILE *fp = NULL;
+
+         int iWrite=0;
+
+         int len=strlen(strI);
+
+         if( strI == NULL || len ==0 )
+
+                   return false;
+
+         //! 打开文件句柄
+
+         if( (fp = fopen( "密文.txt","w" )) == NULL )      // 文本模式写
+
+                   return false;
+
+ 
+
+         iWrite = fwrite(strI, 1, len, fp );
+
+         fclose(fp);
+
+ 
+
+         if( iWrite>0 )
+
+                   return true;
+
+         else
+
+                   return false;
+
+}
 2.	Write user documentation
 Physical software is still being studied because of limited technology.  Such as physical software research success, will supplement the user documentation.  
 3.	Developer documentation
